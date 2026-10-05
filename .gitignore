@@ -1,0 +1,4 @@
+**/bin/
+**/obj/
+src/Shortener.Api/data/
+.DS_Store

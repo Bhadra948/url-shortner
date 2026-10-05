@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173b35">
+  <title>Shortline | Engineering Workbench</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js?v=2" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="wordmark" href="/" aria-label="Shortline home"><span class="brand-mark">S</span><span>SHORTLINE</span></a>
+    <div class="topbar-context">ENGINEERING WORKBENCH <span class="context-separator">/</span> LOCAL ENVIRONMENT</div>
+    <div id="connection-status" class="connection-status" role="status"><span class="status-dot"></span> Connecting</div>
+  </header>
+
+  <nav class="view-tabs" aria-label="Workbench views">
+    <button class="view-tab is-active" data-view="links" aria-selected="true">Link operations</button>
+    <button class="view-tab" data-view="orchestration" aria-selected="false">Change orchestration</button>
+  </nav>
+
+  <main>
+    <section id="links-view" class="view-pane is-visible" aria-labelledby="links-heading">
+      <div class="page-heading">
+        <div><p class="eyebrow">URL SERVICE</p><h1 id="links-heading">Link operations</h1><p class="lede">Create and inspect short links, redirects, and click activity.</p></div>
+        <div class="heading-note"><span class="live-pulse"></span> SQLite persistence enabled</div>
+      </div>
+
+      <div class="link-metrics metrics-row">
+        <div class="metric"><span class="metric-label">ACTIVE LINKS</span><strong id="link-count">0</strong></div>
+        <div class="metric"><span class="metric-label">RECORDED CLICKS</span><strong id="click-count">0</strong></div>
+        <div class="metric"><span class="metric-label">RECENT WINDOW</span><strong>100 <small>links</small></strong></div>
+      </div>
+
+      <div class="operations-layout">
+        <section class="work-section" aria-labelledby="create-heading">
+          <div class="section-heading"><div><p class="eyebrow">NEW DESTINATION</p><h2 id="create-heading">Create a short link</h2></div><span class="section-index">01</span></div>
+          <form id="create-link-form" class="create-form">
+            <label for="target-url">Destination URL</label>
+            <input id="target-url" name="targetUrl" type="url" placeholder="https://example.com/a-long-destination" required maxlength="2048">
+            <div class="form-grid">
+              <div><label for="custom-alias">Custom alias <span class="optional">OPTIONAL</span></label><input id="custom-alias" name="customAlias" type="text" placeholder="launch-notes" minlength="4" maxlength="32" pattern="[A-Za-z0-9_\x2d]{4,32}"></div>
+              <div><label for="expires-at">Expires <span class="optional">OPTIONAL</span></label><input id="expires-at" name="expiresAtUtc" type="datetime-local"></div>
+            </div>
+            <div class="form-footer"><p>HTTP and HTTPS destinations only.</p><button class="button button-primary" type="submit">Create link <span aria-hidden="true">+</span></button></div>
+            <p id="create-message" class="form-message" role="status" aria-live="polite"></p>
+          </form>
+
+          <div class="table-section">
+            <div class="section-heading table-heading"><div><p class="eyebrow">LATEST ACTIVITY</p><h2>Short links</h2></div><button id="refresh-links" class="button button-quiet" type="button">Refresh</button></div>
+            <div class="table-scroll"><table><thead><tr><th>SHORT CODE</th><th>DESTINATION</th><th>CLICKS</th><th></th></tr></thead><tbody id="links-table"><tr><td colspan="4" class="empty-state">No links yet. Create one to get started.</td></tr></tbody></table></div>
+          </div>
+        </section>
+
+        <aside class="analytics-panel" aria-labelledby="analytics-heading">
+          <div class="section-heading"><div><p class="eyebrow">TRAFFIC PROFILE</p><h2 id="analytics-heading">Link analytics</h2></div><span class="section-index">02</span></div>
+          <div id="analytics-content" class="analytics-content"><div class="empty-analytics"><span class="empty-rule"></span><p>Select a short link to inspect its click activity.</p></div></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="orchestration-view" class="view-pane" aria-labelledby="orchestration-heading" hidden>
+      <div class="page-heading">
+        <div><p class="eyebrow">CONTROLLED AUTONOMY</p><h1 id="orchestration-heading">Change orchestration</h1><p class="lede">Execute dependency-aware engineering work with explicit gates and human ownership.</p></div>
+        <div class="heading-note"><span class="approval-mark">H</span> Release always requires approval</div>
+      </div>
+
+      <div class="workflow-metrics metrics-row">
+        <div class="metric"><span class="metric-label">RUN SUCCESS</span><strong id="metric-success">0%</strong></div>
+        <div class="metric"><span class="metric-label">RETRIES / ROLLBACKS</span><strong id="metric-retries">0 <small>/</small> 0</strong><span id="metric-frequencies" class="metric-detail">0% / 0% of runs</span></div>
+        <div class="metric"><span class="metric-label">AVG. END-TO-END</span><strong id="metric-latency">0 <small>ms</small></strong></div>
+        <div class="metric"><span class="metric-label">AVG. MTTR</span><strong id="metric-mttr">0 <small>ms</small></strong></div>
+      </div>
+
+      <div class="workflow-layout">
+        <section class="work-section launch-section" aria-labelledby="launch-heading">
+          <div class="section-heading"><div><p class="eyebrow">START A RUN</p><h2 id="launch-heading">Choose a scenario</h2></div><span class="section-index">01</span></div>
+          <form id="start-run-form" class="create-form">
+            <label for="scenario">Scenario</label>
+            <select id="scenario" name="scenario">
+              <option value="greenfield">Greenfield</option>
+              <option value="brownfield">Brownfield</option>
+              <option value="ambiguous">Ambiguous requirement</option>
+            </select>
+            <p id="scenario-purpose" class="scenario-purpose"></p>
+            <label for="requirement">Requirement</label>
+            <textarea id="requirement" name="requirement" rows="4" maxlength="4000" required></textarea>
+            <details class="fault-options"><summary>Execution fault simulation</summary><label class="check-row"><input type="checkbox" name="injectTransientFailure"> Provider timeout, then retry</label><label class="check-row"><input type="checkbox" name="injectDocumentationFailure"> Documentation failure, then fallback</label><label class="check-row"><input type="checkbox" name="injectValidationFailure"> Validation failure for replan demo</label></details>
+            <div class="form-footer"><p>Runs are simulated; no source files or deployments are changed.</p><button class="button button-primary" type="submit">Start run <span aria-hidden="true">+</span></button></div>
+            <p id="run-message" class="form-message" role="status" aria-live="polite"></p>
+          </form>
+          <div class="prior-runs"><label for="run-picker">Recent runs</label><select id="run-picker"><option value="">No runs yet</option></select></div>
+        </section>
+
+        <section class="run-section" aria-label="Selected workflow run">
+          <div id="run-empty" class="run-empty"><span class="empty-rule"></span><p>Select a scenario to inspect the execution graph.</p></div>
+          <div id="run-detail" hidden>
+            <div class="section-heading run-heading"><div><p class="eyebrow">EXECUTION GRAPH <span id="run-version"></span></p><h2 id="run-title">Workflow run</h2></div><span id="run-status" class="state-badge">Pending</span></div>
+            <div id="stage-list" class="stage-list"></div>
+            <div id="human-action" class="human-action" hidden></div>
+            <details class="replan-details"><summary>Replan this run</summary><form id="replan-form" class="inline-form"><label for="replan-requirement">Updated requirement</label><textarea id="replan-requirement" rows="3" maxlength="4000" required></textarea><label for="replan-rationale">Reason for change</label><input id="replan-rationale" required maxlength="500"><button class="button button-secondary" type="submit">Rollback and replan</button></form></details>
+            <div class="run-footer"><button id="safe-stop" class="button button-danger" type="button">Safe stop</button><span id="run-timing" class="run-timing"></span></div>
+            <details class="audit-details"><summary>Audit trail <span id="audit-integrity" class="integrity-label"></span></summary><ol id="audit-list" class="audit-list"></ol></details>
+          </div>
+        </section>
+      </div>
+    </section>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </main>
+  <footer class="page-footer"><span>SHORTLINE / PROTOTYPE</span><span>Human oversight remains the final release control.</span></footer>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Shortline API",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"run",
+				"--project",
+				"./src/Shortener.Api",
+				"--urls",
+				"http://127.0.0.1:5078"
+			],
+			"isBackground": true,
+			"problemMatcher": [
+				{
+					"pattern": {
+						"regexp": "."
+					},
+					"background": {
+						"activeOnStart": true,
+						"beginsPattern": "Building...",
+						"endsPattern": "Now listening on:"
+					}
+				}
+			],
+			"group": "build"
+		},
+		{
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/Shortener.Api/Shortener.Api.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+	]
+}
